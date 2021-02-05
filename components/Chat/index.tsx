@@ -1,4 +1,5 @@
-import React from 'react'
+import axios from 'axios'
+import React, { useRef, useState } from 'react'
 import Message from '../Message'
 import {
   Container,
@@ -13,7 +14,37 @@ import {
   SendMessageButton
 } from './styles'
 
-const Chat: React.FC = () => {
+type Message = {
+  message: string
+  name: string
+  timestamp: string
+  received: boolean
+}
+
+type ChatProps = {
+  messages: Message[]
+  bodyChatRef: React.MutableRefObject<HTMLDivElement>
+}
+
+const Chat: React.FC<ChatProps> = (props) => {
+  const { messages, bodyChatRef } = props
+
+  const [input, setInput] = useState('')
+
+  const sendMessage = async (e) => {
+    e.preventDefault()
+    try {
+      await axios.post('http://localhost:3333/api/v1/messages/new', {
+        name: 'Renato',
+        message: input,
+        timestamp: new Date().toUTCString(),
+        received: false
+      })
+      setInput('')
+    } catch (error) {
+      console.error(error)
+    }
+  }
   return (
     <Container>
       <Header>
@@ -22,18 +53,27 @@ const Chat: React.FC = () => {
           <Status>Last seen at...</Status>
         </Info>
       </Header>
-      <Body>
-        <Message userName="Renato">This is a message !!</Message>
-        <Message userName="Renato" receiver>
-          This is a message !!
-        </Message>
-        <Message userName="Renato">This is a message !!</Message>
-        <Message userName="Renato">This is a message !!</Message>
+      <Body ref={bodyChatRef} id="bodyChat">
+        {messages.map(({ name, message, received, timestamp }, index) => (
+          <Message
+            userName={name}
+            receiver={!received}
+            timestamp={timestamp}
+            key={index}
+          >
+            {message}
+          </Message>
+        ))}
       </Body>
       <Footer>
         <Form>
-          <Input placeholder="Type a message" type="text" />
-          <SendMessageButton type="submit" onClick={() => alert('hello')}>
+          <Input
+            value={input}
+            placeholder="Type a message"
+            type="text"
+            onChange={(e) => setInput(e.target.value)}
+          />
+          <SendMessageButton type="submit" onClick={sendMessage}>
             Send
           </SendMessageButton>
         </Form>

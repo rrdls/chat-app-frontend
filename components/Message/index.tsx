@@ -5,16 +5,17 @@ import { Container, Text, DateTime, UserName } from './styles'
 interface IMessageProps {
   userName: string
   receiver?: boolean
+  timestamp: string
 }
 
 const Message: React.FC<IMessageProps> = (props) => {
-  const { userName, children, receiver } = props
+  const { userName, children, receiver, timestamp } = props
   return (
     <Container>
       <Text receiver={receiver}>
         <UserName>{userName}</UserName>
         {children}
-        <DateTime>{new Date().toUTCString()}</DateTime>
+        <DateTime>{timestamp}</DateTime>
       </Text>
     </Container>
   )
