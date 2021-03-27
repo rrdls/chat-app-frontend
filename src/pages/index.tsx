@@ -1,10 +1,16 @@
-import React, { useEffect, useRef, useState } from 'react'
-import { useDispatch } from 'react-redux'
+import React, { ReactNode, useEffect, useRef, useState } from 'react'
 import Chat from '../components/Chat'
 import SideBar from '../components/SideBar'
 import styled from 'styled-components'
 import Pusher, { Channel } from 'pusher-js'
 import axios from 'axios'
+import Button from '../components/Button'
+import { useSelector, useDispatch } from 'react-redux'
+import {
+  loadMessages,
+  addMessages
+} from '../global-states/slices/messagesSlice'
+import { scrollChatBodyDown } from '../utils/messages'
 
 export const Container = styled.div`
   display: grid;
@@ -23,22 +29,16 @@ export const Body = styled.div`
   font-family: ${(props) => props.theme.font.fontFamily};
 `
 
-const IndexPage: React.FC = () => {
-  const [messages, setMessages] = useState([])
-  const bodyChatRef = useRef<HTMLDivElement>()
+const IndexPage = () => {
+  const messages = useSelector((state) => state.messages.messages)
+  const dispatch = useDispatch()
+  const chatBodyRef = useRef<HTMLDivElement>()
+
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(
-          'http://localhost:3333/api/v1/messages/sync'
-        )
-        setMessages(response.data)
-        bodyChatRef.current.scrollTop = bodyChatRef.current.scrollHeight
-      } catch (error) {
-        console.error(error)
-      }
-    }
-    fetchData()
+    ;(async () => {
+      await dispatch(loadMessages())
+      scrollChatBodyDown({ chatBodyRef })
+    })()
   }, [])
 
   useEffect(() => {
@@ -46,8 +46,9 @@ const IndexPage: React.FC = () => {
       cluster: 'eu'
     })
     const channel = pusher.subscribe('message')
-    channel.bind('inserted', (newMessage) => {
-      setMessages([...messages, newMessage])
+    channel.bind('inserted', async (newMessage) => {
+      await dispatch(addMessages(newMessage))
+      scrollChatBodyDown({ chatBodyRef })
     })
     return () => {
       channel.unbind_all()
@@ -59,7 +60,7 @@ const IndexPage: React.FC = () => {
     <Container>
       <Body>
         <SideBar />
-        <Chat messages={messages} bodyChatRef={bodyChatRef} />
+        <Chat chatBodyRef={chatBodyRef} />
       </Body>
     </Container>
   )

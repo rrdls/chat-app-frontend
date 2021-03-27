@@ -25,7 +25,7 @@ export const Body = styled.div`
   flex: 1;
   background-color: rgba(0, 0, 0, 0.05);
   padding: 30px;
-  overflow-y: scroll;
+  overflow-y: auto;
   font-size: 1.1rem;
 `
 export const Footer = styled.div`

@@ -8,8 +8,8 @@ export const addNote = createAsyncThunk(
         method: 'POST',
         body: JSON.stringify(newNote),
         headers: {
-          'Content-Type': 'application/json',
-        },
+          'Content-Type': 'application/json'
+        }
       })
 
       if (!response.ok) {
@@ -48,8 +48,8 @@ export const editNote = createAsyncThunk(
         method: 'PUT',
         body: JSON.stringify({ title, content }),
         headers: {
-          'Content-Type': 'application/json',
-        },
+          'Content-Type': 'application/json'
+        }
       })
 
       return response.json()
@@ -75,7 +75,7 @@ const notesSlice = createSlice({
   name: 'notes',
   initialState: {
     notes: [],
-    loading: 'idle',
+    loading: 'idle'
   },
   reducers: {},
   extraReducers: {
@@ -133,14 +133,14 @@ const notesSlice = createSlice({
       state.notes.splice(state.backupPosition, 0, state.backupNote)
       delete state.backupPosition
       delete state.backupNote
-    },
-  },
+    }
+  }
 })
 
 export const selectNotes = createSelector(
   (state) => ({
     notes: state.notes.notes,
-    error: state.notes.error,
+    error: state.notes.error
   }),
   (state) => state
 )

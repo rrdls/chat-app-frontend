@@ -1,9 +1,9 @@
 import { configureStore } from '@reduxjs/toolkit'
-import notesReducer from './slices/notesSlice'
+import messagesReducer from './slices/messagesSlice'
 
 export default configureStore({
   reducer: {
-    notes: notesReducer
+    messages: messagesReducer
   },
   devTools: true
 })

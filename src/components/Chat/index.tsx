@@ -1,4 +1,3 @@
-import axios from 'axios'
 import React, { useRef, useState } from 'react'
 import Message from '../Message'
 import {
@@ -13,6 +12,12 @@ import {
   Status,
   SendMessageButton
 } from './styles'
+import { useSelector, useDispatch } from 'react-redux'
+import {
+  addMessages,
+  postMessage
+} from '../../global-states/slices/messagesSlice'
+import { scrollChatBodyDown } from '../../utils/messages'
 
 type Message = {
   message: string
@@ -22,24 +27,28 @@ type Message = {
 }
 
 type ChatProps = {
-  messages: Message[]
-  bodyChatRef: React.MutableRefObject<HTMLDivElement>
+  chatBodyRef: React.MutableRefObject<HTMLDivElement>
 }
 
 const Chat: React.FC<ChatProps> = (props) => {
-  const { messages, bodyChatRef } = props
-
+  const { chatBodyRef } = props
+  const messages = useSelector((state) => state.messages.messages)
   const [input, setInput] = useState('')
+  const dispatch = useDispatch()
 
   const sendMessage = async (e) => {
     e.preventDefault()
+    const newMessage = {
+      name: 'Renato',
+      message: input,
+      timestamp: new Date().toUTCString(),
+      received: false,
+      user_id: '134'
+    }
     try {
-      await axios.post('http://localhost:3333/api/v1/messages/new', {
-        name: 'Renato',
-        message: input,
-        timestamp: new Date().toUTCString(),
-        received: false
-      })
+      await dispatch(addMessages(newMessage))
+      scrollChatBodyDown({ chatBodyRef })
+      dispatch(postMessage(newMessage))
       setInput('')
     } catch (error) {
       console.error(error)
@@ -53,8 +62,8 @@ const Chat: React.FC<ChatProps> = (props) => {
           <Status>Last seen at...</Status>
         </Info>
       </Header>
-      <Body ref={bodyChatRef} id="bodyChat">
-        {messages.map(({ name, message, received, timestamp }, index) => (
+      <Body ref={chatBodyRef} id="bodyChat">
+        {messages?.map(({ name, message, received, timestamp }, index) => (
           <Message
             userName={name}
             receiver={!received}
