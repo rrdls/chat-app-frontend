@@ -12,10 +12,10 @@ export const GlobalStyle = createGlobalStyle<IGlobalStyleProps>`
     box-sizing: border-box;
     outline: 0;
   }
-
+  
   body{
     font-family: ${(props) => props.theme.font.fontFamily};
-    font-size: 62.5%;
+    font-size: 62.5%; 
   }
 
 `

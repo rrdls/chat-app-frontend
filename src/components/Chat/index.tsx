@@ -1,17 +1,9 @@
 import React, { useRef, useState } from 'react'
 import Message from '../Message'
-import {
-  Container,
-  Header,
-  Form,
-  Footer,
-  Input,
-  Body,
-  RoomName,
-  Info,
-  Status,
-  SendMessageButton
-} from './styles'
+import Image from 'next/image'
+
+import * as S from './styles'
+
 import { useSelector, useDispatch } from 'react-redux'
 import {
   addMessages,
@@ -26,11 +18,11 @@ type Message = {
   received: boolean
 }
 
-type ChatProps = {
+type Props = {
   chatBodyRef: React.MutableRefObject<HTMLDivElement>
 }
 
-const Chat: React.FC<ChatProps> = (props) => {
+const Chat: React.FC<Props> = (props) => {
   const { chatBodyRef } = props
   const messages = useSelector((state) => state.messages.messages)
   const [input, setInput] = useState('')
@@ -38,10 +30,13 @@ const Chat: React.FC<ChatProps> = (props) => {
 
   const sendMessage = async (e) => {
     e.preventDefault()
+    const date = new Date()
+    const hours = date.getHours()
+    const minutes = date.getMinutes()
     const newMessage = {
       name: 'Renato',
       message: input,
-      timestamp: new Date().toUTCString(),
+      timestamp: hours + ':' + minutes,
       received: false,
       user_id: '134'
     }
@@ -51,43 +46,48 @@ const Chat: React.FC<ChatProps> = (props) => {
       dispatch(postMessage(newMessage))
       setInput('')
     } catch (error) {
-      console.error(error)
+      console.error(error.message)
     }
   }
+
   return (
-    <Container>
-      <Header>
-        <Info>
-          <RoomName>Room Name</RoomName>
-          <Status>Last seen at...</Status>
-        </Info>
-      </Header>
-      <Body ref={chatBodyRef} id="bodyChat">
-        {messages?.map(({ name, message, received, timestamp }, index) => (
-          <Message
-            userName={name}
-            receiver={!received}
-            timestamp={timestamp}
-            key={index}
-          >
+    <S.Container>
+      <S.Header>
+        <S.ProfileImage>
+          <Image
+            src="/img/grogu.jpg"
+            alt="Picture of the author"
+            width={50}
+            height={50}
+            className="profile"
+          />
+        </S.ProfileImage>
+        <S.Info>
+          <S.RoomName>Room Name</S.RoomName>
+          <S.Status>Last seen at...</S.Status>
+        </S.Info>
+      </S.Header>
+      <S.Body ref={chatBodyRef} id="bodyChat">
+        {messages?.map(({ message, received, timestamp }, index) => (
+          <Message receiver={received} timestamp={timestamp} key={index}>
             {message}
           </Message>
         ))}
-      </Body>
-      <Footer>
-        <Form>
-          <Input
+      </S.Body>
+      <S.Footer>
+        <S.Form>
+          <S.Input
             value={input}
             placeholder="Type a message"
             type="text"
             onChange={(e) => setInput(e.target.value)}
           />
-          <SendMessageButton type="submit" onClick={sendMessage}>
+          <S.SendMessageButton type="submit" onClick={sendMessage}>
             Send
-          </SendMessageButton>
-        </Form>
-      </Footer>
-    </Container>
+          </S.SendMessageButton>
+        </S.Form>
+      </S.Footer>
+    </S.Container>
   )
 }
 

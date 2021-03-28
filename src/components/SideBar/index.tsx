@@ -1,32 +1,59 @@
 import React from 'react'
 import SideBarChat from '../SideBarChat'
-import {
-  Container,
-  Header,
-  SearchBar,
-  SearchInputContainer,
-  Input,
-  Chats
-} from './styles'
 
-interface ISideBarProps {}
+import * as S from './styles'
 
-const SideBar: React.FC<ISideBarProps> = (props) => {
+type Props = {}
+const SideBar: React.FC<Props> = (props) => {
   return (
-    <Container>
-      <Header></Header>
-      <SearchBar>
-        <SearchInputContainer>
-          <Input />
-        </SearchInputContainer>
-      </SearchBar>
-      <Chats>
+    <S.Container>
+      <S.Header>
+        <h1>Message</h1>
+      </S.Header>
+      <S.SearchBar>
+        <S.SearchInputContainer>
+          <S.Input placeholder="Search for messages" />
+        </S.SearchInputContainer>
+      </S.SearchBar>
+      <S.Chats>
+        <SideBarChat
+          name="Renato Ramoss"
+          lastMessage="This is the last message"
+        />
         <SideBarChat
           name="Renato Ramos"
           lastMessage="This is the last message"
         />
-      </Chats>
-    </Container>
+        <SideBarChat
+          name="Renato Ramos"
+          lastMessage="This is the last message"
+        />
+        <SideBarChat
+          name="Renato Ramos"
+          lastMessage="This is the last message"
+        />
+        <SideBarChat
+          name="Renato Ramos"
+          lastMessage="This is the last message"
+        />
+        <SideBarChat
+          name="Renato Ramos"
+          lastMessage="This is the last message"
+        />
+        <SideBarChat
+          name="Renato Ramos"
+          lastMessage="This is the last message"
+        />
+        <SideBarChat
+          name="Renato Ramos"
+          lastMessage="This is the last message"
+        />
+        <SideBarChat
+          name="Renato Ramos"
+          lastMessage="This is the last message"
+        />
+      </S.Chats>
+    </S.Container>
   )
 }
 

@@ -1,21 +1,31 @@
 import React from 'react'
+import Image from 'next/image'
 
-import { Container, Info, Name, LastMessage } from './styles'
+import * as S from './styles'
 
-interface ISideBarChatProps {
+type Props = {
   name: string
   lastMessage: string
 }
 
-const SideBarChat: React.FC<ISideBarChatProps> = (props) => {
+const SideBarChat: React.FC<Props> = (props) => {
   const { name, lastMessage } = props
   return (
-    <Container>
-      <Info>
-        <Name>{name}</Name>
-        <LastMessage>{lastMessage}</LastMessage>
-      </Info>
-    </Container>
+    <S.Container>
+      <S.ProfileImage>
+        <Image
+          src="/img/grogu.jpg"
+          alt="Picture of the author"
+          width={50}
+          height={50}
+          className="profile"
+        />
+      </S.ProfileImage>
+      <S.Info>
+        <S.Name>{name}</S.Name>
+        <S.LastMessage>{lastMessage}</S.LastMessage>
+      </S.Info>
+    </S.Container>
   )
 }
 

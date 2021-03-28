@@ -1,31 +1,28 @@
 import React, { ReactNode, useEffect, useRef, useState } from 'react'
 import Chat from '../components/Chat'
 import SideBar from '../components/SideBar'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 import Pusher, { Channel } from 'pusher-js'
 import axios from 'axios'
-import Button from '../components/Button'
 import { useSelector, useDispatch } from 'react-redux'
 import {
   loadMessages,
   addMessages
 } from '../global-states/slices/messagesSlice'
 import { scrollChatBodyDown } from '../utils/messages'
+import Menu from '../components/Menu'
 
 export const Container = styled.div`
-  display: grid;
-  place-items: center;
   height: 100vh;
-  background-color: #a0a0a0;
 `
 
 export const Body = styled.div`
-  display: flex;
-  background-color: #ededed;
-  margin-top: --50px;
-  height: 90vh;
-  width: 90vw;
-  box-shadow: -1px 4px 20px -6px rgba(0, 0, 0, 0.75);
+  display: grid;
+  grid-template-columns: 1fr 4fr 14fr;
+  grid-template-rows: 100%;
+  width: 100%;
+  height: 100%;
+  background-color: ${(props) => props.theme.colors.color2};
   font-family: ${(props) => props.theme.font.fontFamily};
 `
 
@@ -59,6 +56,7 @@ const IndexPage = () => {
   return (
     <Container>
       <Body>
+        <Menu />
         <SideBar />
         <Chat chatBodyRef={chatBodyRef} />
       </Body>

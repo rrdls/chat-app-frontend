@@ -1,9 +1,9 @@
 import { Story, Meta } from '@storybook/react/types-6-0'
-import Button from '.'
+import Chat from '.'
 
 export default {
   title: 'Button',
-  component: Button
+  component: Chat
 } as Meta
 
-export const Default: Story = () => <Button />
+export const Default: Story = () => <Chat />

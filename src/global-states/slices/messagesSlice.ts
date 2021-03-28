@@ -45,19 +45,30 @@ export const loadMessages = createAsyncThunk(
 const messagesSlice = createSlice({
   name: 'messages',
   initialState: {
-    messages: []
+    messages: [],
+    postMessageIsLoading: false,
+    loadMessagesIsLoading: false
   },
   reducers: {
     addMessages: (state, action) => {
       state.messages = [...state.messages, action.payload]
+      state.postMessageIsLoading = false
     }
   },
   extraReducers: (builder) => {
     builder.addCase(loadMessages.fulfilled, (state, action) => {
       state.messages = action.payload
+      state.loadMessagesIsLoading = false
     })
     builder.addCase(loadMessages.rejected, (state, action) => {
-      throw new Error(action.error.message)
+      console.log(action.error.message)
+      // throw new Error(action.error.message)
+    })
+    builder.addCase(loadMessages.pending, (state, action) => {
+      state.loadMessagesIsLoading = true
+    })
+    builder.addCase(postMessage.pending, (state, action) => {
+      state.postMessageIsLoading = true
     })
   }
 })

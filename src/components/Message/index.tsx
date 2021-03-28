@@ -1,23 +1,20 @@
 import React from 'react'
 
-import { Container, Text, DateTime, UserName } from './styles'
+import * as S from './styles'
 
-interface IMessageProps {
-  userName: string
+type Props = {
   receiver?: boolean
   timestamp: string
 }
 
-const Message: React.FC<IMessageProps> = (props) => {
-  const { userName, children, receiver, timestamp } = props
+const Message: React.FC<Props> = ({ children, receiver, timestamp }) => {
   return (
-    <Container>
-      <Text receiver={receiver}>
-        <UserName>{userName}</UserName>
+    <S.Container>
+      <S.Text receiver={receiver}>
         {children}
-        <DateTime>{timestamp}</DateTime>
-      </Text>
-    </Container>
+        <S.DateTime>{timestamp}</S.DateTime>
+      </S.Text>
+    </S.Container>
   )
 }
 
