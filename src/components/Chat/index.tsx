@@ -1,22 +1,10 @@
-import React, { useRef, useState } from 'react'
+import React, { useState } from 'react'
 import Message from '../Message'
 import Image from 'next/image'
-
 import * as S from './styles'
-
 import { useSelector, useDispatch } from 'react-redux'
-import {
-  addMessages,
-  postMessage
-} from '../../global-states/slices/messagesSlice'
+import { addMessages, postMessage } from '../../global-states/slices'
 import { scrollChatBodyDown } from '../../utils/messages'
-
-type Message = {
-  message: string
-  name: string
-  timestamp: string
-  received: boolean
-}
 
 type Props = {
   chatBodyRef: React.MutableRefObject<HTMLDivElement>
@@ -34,11 +22,14 @@ const Chat: React.FC<Props> = (props) => {
     const hours = date.getHours()
     const minutes = date.getMinutes()
     const newMessage = {
-      name: 'Renato',
-      message: input,
-      timestamp: hours + ':' + minutes,
-      received: false,
-      user_id: '134'
+      user_id: '100',
+      channel: 'channel100',
+      message: {
+        _id: '1121312312',
+        message: input,
+        timestamp: hours + ':' + minutes,
+        user_id: '456'
+      }
     }
     try {
       await dispatch(addMessages(newMessage))

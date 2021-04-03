@@ -39,9 +39,8 @@ const IndexPage = () => {
   }, [])
 
   useEffect(() => {
-    const pusher = new Pusher('3fd0bf5e51fea33ce05a', {
-      cluster: 'eu'
-    })
+    const options = { cluster: 'eu' }
+    const pusher = new Pusher('3fd0bf5e51fea33ce05a', options)
     const channel = pusher.subscribe('message')
     channel.bind('inserted', async (newMessage) => {
       await dispatch(addMessages(newMessage))

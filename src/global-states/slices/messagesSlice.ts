@@ -3,21 +3,23 @@ import env from '../../config/env'
 
 type Message = {
   message: string
-  name: string
   timestamp: string
-  received: boolean
+}
+
+type User = {
+  user_id: string
+  channel: string
+  message: Message
 }
 
 export const postMessage = createAsyncThunk(
   'messages/postMessage',
-  async (newMessage: Message, { rejectWithValue }) => {
+  async (newMessage: User, { rejectWithValue }) => {
     try {
-      const response = await fetch('http://localhost:3333/api/v1/messages', {
+      const response = await fetch('http://localhost:3333/api/v1/message', {
         method: 'POST',
         body: JSON.stringify(newMessage),
-        headers: {
-          'Content-Type': 'application/json'
-        }
+        headers: { 'Content-Type': 'application/json' }
       })
       if (!response.ok) {
         const error = await response.json()
@@ -51,7 +53,7 @@ const messagesSlice = createSlice({
   },
   reducers: {
     addMessages: (state, action) => {
-      state.messages = [...state.messages, action.payload]
+      state.messages = [...state.messages, action.payload.message]
       state.postMessageIsLoading = false
     }
   },
